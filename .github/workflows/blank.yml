@@ -10,8 +10,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'release/qa' && startsWith(github.event.pull_request.head.ref, 'feature/')
     steps:
+      - name: Check if PR is from feature/* to release/qa
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'release/qa' && startsWith(github.event.pull_request.head.ref, 'feature/')
+        run: echo "Valid PR from feature/* to release/qa"
+        
+      # Si no pasa el check, se detiene el flujo
+      - name: Abort if not from feature/* to release/qa
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'release/qa' && !startsWith(github.event.pull_request.head.ref, 'feature/')
+        run: |
+          echo "Error: PR must be from a feature/* branch to release/qa."
+          exit 1
+
+      # Los pasos del flujo de trabajo (solo si el check pasa)
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup Node.js
