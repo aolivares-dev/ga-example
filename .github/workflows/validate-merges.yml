@@ -6,7 +6,6 @@ on:
       - "development"
       - "main"
       - "release/qa"
-      - "feature/*"
 
 jobs:
   validate-merge:
