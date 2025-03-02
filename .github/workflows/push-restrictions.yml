@@ -10,9 +10,15 @@ on:
 jobs:
   block-direct-push:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && !contains(github.event.head_commit.message, 'Merge pull request')
+    if: github.event_name == 'push'
     steps:
+    - name: Print GitHub Event
+      run: |
+        echo "GitHub Event:"
+        echo "${{ toJson(github.event) }}"
     - name: Block Direct Push
       run: |
-        echo "Error: No se permite hacer push directo a main, development o release/qa."
-        exit 1
+        if [[ "${{ github.event_name }}" == "push" && ! "${{ github.event.head_commit.message }}" == *"Merge pull request"* ]]; then
+          echo "Error: No se permite hacer push directo a main, development o release/qa."
+          exit 1
+        fi
