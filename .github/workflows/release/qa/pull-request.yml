@@ -1,4 +1,4 @@
-name: Validate PR
+name: Validate PR source branch on release/qa
 
 on:
   pull_request:
@@ -23,4 +23,3 @@ jobs:
       - name: Validate PR source branch
         if: "${{ startsWith(github.event.pull_request.head.ref, 'feature/') }}"
         run: echo "Pull request válido desde una rama feature/*"
-      
