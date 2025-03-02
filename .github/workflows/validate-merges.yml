@@ -1,0 +1,25 @@
+name: Validate Merge Flow
+
+on:
+  pull_request:
+    branches:
+      - "development"
+      - "main"
+
+jobs:
+  validate-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR source branch for development
+        if: "${{ github.event.pull_request.base.ref == 'development' && github.event.pull_request.head.ref == 'release/qa' }}"
+        run: echo "Merge válido de release/qa a development"
+      
+      - name: Validate PR source branch for main
+        if: "${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'development' }}"
+        run: echo "Merge válido de development a main"
+      
+      - name: Fail if invalid PR
+        if: "${{ (github.event.pull_request.base.ref == 'development' && github.event.pull_request.head.ref != 'release/qa') || (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'development') }}"
+        run: |
+          echo "Error: Los merges solo pueden seguir el flujo release/qa -> development -> main."
+          exit 1
