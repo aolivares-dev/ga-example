@@ -9,6 +9,7 @@ on:
 
 jobs:
   block-direct-push:
+    if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Block Direct Push
