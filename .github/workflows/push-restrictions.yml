@@ -22,11 +22,9 @@ jobs:
         done
     - name: Block Direct Push
       run: |
-        # Obtener todos los mensajes de los commits
-        commit_messages="${{ github.event.commits[*].message }}"
+        commit_messages= $(git log --format=%B -n 1 ${{ github.sha }})
         echo "Commit messages: $commit_messages"
         
-        # Comprobar si algún commit es un "Merge pull request"
         if [[ "$commit_messages" == *"Merge pull request"* ]]; then
           echo "Merge detected, no direct push blocking needed."
         else
