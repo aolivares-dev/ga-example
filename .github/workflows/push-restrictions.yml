@@ -6,6 +6,12 @@ on:
       - "main"
       - "development"
       - "release/qa"
+  
+  pull_request:
+    branches:
+      - "main"
+      - "development"
+      - "release/qa"
       
 jobs:
   block-direct-push:
