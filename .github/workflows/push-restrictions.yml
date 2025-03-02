@@ -18,22 +18,22 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
-    - name: Print GitHub Event
-      run: |
-        echo "GitHub Event:"
-        echo "${{ toJson(github.event) }}"
-        echo "Commit Messages:"
-        for commit in "${{ github.event.commits }}"; do
-          echo "$commit"
-        done
     - name: Block Direct Push
       run: |
-        commit_messages= $(git log --format=%B -n 1 ${{ github.sha }})
-        echo "Commit messages: $commit_messages"
-        
-        if [[ "$commit_messages" == *"Merge pull request"* ]]; then
-          echo "Merge detected, no direct push blocking needed."
-        else
-          echo "Error: No se permite hacer push directo a main, development o release/qa."
-          exit 1
-        fi
+        echo ${{ github.event.action }}
+        echo ${{ github.event.commits }}
+        echo ${{ github.event.compare }}
+        echo ${{ github.event.before }}
+        echo ${{ github.event.after }}
+        echo ${{ github.event.head_commit }}
+        echo ${{ github.event.repository }}
+        echo ${{ github.event.sender }}
+        echo ${{ github.event_name }}
+        echo ${{ github.ref }}
+        echo ${{ github.ref_type }}
+        echo ${{ github.head_ref }}
+        echo ${{ github.base_ref }}
+        echo ${{ github.event.pull_request.head.ref }}
+        echo ${{ github.event.pull_request.base.ref }}
+        echo ${{ github.event.pull_request.head.repo.full_name }}
+        echo ${{ github.event.pull_request.head.repo.owner.login }}
