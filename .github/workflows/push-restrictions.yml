@@ -6,12 +6,6 @@ on:
       - "main"
       - "development"
       - "release/qa"
-  
-  pull_request:
-    branches:
-      - "main"
-      - "development"
-      - "release/qa"
       
 jobs:
   block-direct-push:
@@ -20,7 +14,6 @@ jobs:
     steps:
     - name: Block Direct Push
       run: |
-        echo "Action: ${{ toJson(github.event.action) }}"
         echo "Compare URL: ${{ toJson(github.event.compare) }}"
         echo "Before commit: ${{ toJson(github.event.before) }}"
         echo "After commit: ${{ toJson(github.event.after) }}"
@@ -31,7 +24,3 @@ jobs:
         echo "Ref Type: ${{ github.ref_type }}"
         echo "Head Ref: ${{ github.head_ref }}"
         echo "Base Ref: ${{ github.base_ref }}"
-        echo "Pull request head ref: ${{ toJson(github.event.pull_request.head.ref) }}"
-        echo "Pull request base ref: ${{ toJson(github.event.pull_request.base.ref) }}"
-        echo "Pull request head repo full name: ${{ toJson(github.event.pull_request.head.repo.full_name) }}"
-        echo "Pull request head repo owner login: ${{ toJson(github.event.pull_request.head.repo.owner.login) }}"
