@@ -16,9 +16,16 @@ jobs:
       run: |
         echo "GitHub Event:"
         echo "${{ toJson(github.event) }}"
+        echo "Commit Message: ${{ github.event.head_commit.message }}"
     - name: Block Direct Push
       run: |
-        if [[ "${{ github.event_name }}" == "push" && ! "${{ github.event.head_commit.message }}" == *"Merge pull request"* ]]; then
+        # Imprimir el mensaje del commit y verificar si contiene "Merge pull request"
+        commit_message="${{ github.event.head_commit.message }}"
+        echo "Commit message: $commit_message"
+        
+        if [[ "$commit_message" == *"Merge pull request"* ]]; then
+          echo "Merge detected, no direct push blocking needed."
+        else
           echo "Error: No se permite hacer push directo a main, development o release/qa."
           exit 1
         fi
