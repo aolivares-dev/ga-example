@@ -6,13 +6,13 @@ on:
       - "main"
       - "development"
       - "release/qa"
-
+      
 jobs:
   block-direct-push:
-    if: "${{ github.event_name == 'push' && github.actor != 'github-actions[bot]' }}"
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, 'Merge pull request')
     steps:
-      - name: Block Direct Push
-        run: |
-          echo "Error: No se permite hacer push directo a main, development o release/qa."
-          exit 1
+    - name: Block Direct Push
+      run: |
+        echo "Error: No se permite hacer push directo a main, development o release/qa."
+        exit 1
