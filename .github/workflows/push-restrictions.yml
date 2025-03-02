@@ -1,0 +1,17 @@
+name: Restrict Direct Pushes
+
+on:
+  push:
+    branches:
+      - "main"
+      - "development"
+      - "release/qa"
+
+jobs:
+  block-direct-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block Direct Push
+        run: |
+          echo "Error: No se permite hacer push directo a main, development o release/qa."
+          exit 1
