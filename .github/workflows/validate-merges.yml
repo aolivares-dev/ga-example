@@ -5,21 +5,27 @@ on:
     branches:
       - "development"
       - "main"
+      - "release/qa"
+      - "feature/*"
 
 jobs:
   validate-merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate PR source branch for development
-        if: "${{ github.event.pull_request.base.ref == 'development' && github.event.pull_request.head.ref == 'release/qa' }}"
-        run: echo "Merge válido de release/qa a development"
-      
       - name: Validate PR source branch for main
         if: "${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'development' }}"
         run: echo "Merge válido de development a main"
-      
+
+      - name: Validate PR source branch for development
+        if: "${{ github.event.pull_request.base.ref == 'development' && github.event.pull_request.head.ref == 'release/qa' }}"
+        run: echo "Merge válido de release/qa a development"
+
+      - name: Validate PR source branch for release/qa
+        if: "${{ github.event.pull_request.base.ref == 'release/qa' && startsWith(github.event.pull_request.head.ref, 'feature/')}}"
+        run: echo "Merge válido de feature/* a release/qa"
+
       - name: Fail if invalid PR
-        if: "${{ (github.event.pull_request.base.ref == 'development' && github.event.pull_request.head.ref != 'release/qa') || (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'development') }}"
+        if: "${{ (github.event.pull_request.base.ref == 'development' && github.event.pull_request.head.ref != 'release/qa') || (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'development') || (github.event.pull_request.base.ref == 'release/qa' && !startsWith(github.event.pull_request.head.ref, 'feature/')) }}"
         run: |
           echo "Error: Los merges solo pueden seguir el flujo release/qa -> development -> main."
           exit 1
